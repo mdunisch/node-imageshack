@@ -1,0 +1,29 @@
+{
+  "name": "imageshack",
+  "version": "0.1.0",
+  "description": "A node.js wrapper for ImageShack-API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mdunisch/node-imageshack.git"
+  },
+  "keywords": [
+    "node",
+    "imageshack"
+  ],
+  "author": "mdunisch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mdunisch/node-imageshack/issues"
+  },
+  "homepage": "https://github.com/mdunisch/node-imageshack",
+  "dependencies": {
+    "form-data": "^0.1.2"
+  },
+    "engines":{
+     "node": ">= 0.10.0"
+    }
+}
