@@ -3,6 +3,7 @@
 
 var FormData = require('form-data');
 
+
 /* Class Imageshack
  * Upload files to Imageshack
  */
@@ -33,12 +34,73 @@ var Imageshack = (function () {
                 this.api_key = configobject.api_key;
                 this.email = configobject.email;
                 this.passwd = configobject.passwd;
-                this.api_url = "http://api.imageshack.com/v2/";
+                this.api_host = "api.imageshack.com";
+                this.api_url = "http://" + this.api_host + "/v2/";
             }
 
         }
 
     }
+
+
+    /* TODO: Currently don't work (From.append seems to dont work with method DELETE)
+     * Delete a File
+     * @param id ImageShack-ID of the image
+     * @param callback Callbackfunction (err) err = null if sucess
+     */
+
+    Imguploader.prototype.del = function(id, callback){
+        var self = this;
+
+        // Check if auth_id is set
+        if(this.auth_id == ""){
+
+            // At the moment a auth is doing, wait 1 secound
+            if(this.doingauth){
+
+                setTimeout(function () {
+                    self.del(id,callback);
+                }, 100);
+
+            }else{
+                this.auth(function(err){
+                    if(err){
+                        callback(err);
+                    }else{
+                        self.del(id,callback);
+                    }
+                });
+            }
+
+            // Do upload
+        }else{
+
+            var text = "";
+            var form = new FormData();
+            form.append('api_key',  this.api_key);
+            form.append("auth_token",this.auth_id);
+            form.append("ids",id);
+
+            form.submit({
+                host: "api.imageshack.com",
+                path: "/v2/images",
+                method: "DELETE"
+            }, function(err, res) {
+                if (err) {
+                    callback("Error delete: "+ err);
+                }else{
+                    res.on('data', function (chunk) {
+                        text +=  chunk;
+                    });
+
+                    res.on("end", function(){
+                        callback(null,text);
+                    });
+                }
+            });
+
+        }
+    };
 
     /*
      * Upload a new File
@@ -57,7 +119,7 @@ var Imageshack = (function () {
 
             streamobj.pause();
 
-            if (typeof streamobj.read != 'function'){
+            if (typeof streamobj.read != 'function' || typeof streamobj.on != 'function'){
                 callback("Upload-Paramter is not a readable Stream");
             }else{
                 // Check if auth_id is set
@@ -112,10 +174,15 @@ var Imageshack = (function () {
                                 if(body != undefined){
 
                                     try {
-                                        var link = body.result.images[0].direct_link;
 
-                                        link = link.replace("imageshack.us/","http://imagizer.imageshack.us/");
-                                        callback(null, link);
+                                        var link = body.result.images[0].direct_link.replace("imageshack.us/","http://imagizer.imageshack.us/");
+
+                                        var returnobj = {
+                                            original_filename: body.result.images[0].original_filename,
+                                            link: link,
+                                            id: body.result.images[0].id
+                                        };
+                                        callback(null, returnobj);
 
                                     } catch (e) {
 
