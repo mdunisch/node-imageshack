@@ -177,26 +177,27 @@ var Imageshack = (function () {
 
                                         var link = body.result.images[0].direct_link.replace("imageshack.us/","http://imagizer.imageshack.us/");
 
+                                    } catch (e) {
+
+                                        // If auth_token missing
+                                        if(body.error.error_message != undefined){
+                                            self.auth_id = "";
+                                            self.upload(streamobj, callback);
+                                        }else{
+                                            callback("Error upload: " +text);
+                                        }
+                                    }
+
+                                    if(link != undefined){
+
                                         var returnobj = {
                                             original_filename: body.result.images[0].original_filename,
                                             link: link,
                                             id: body.result.images[0].id
                                         };
                                         callback(null, returnobj);
-
-                                    } catch (e) {
-
-                                        // If auth_token missing
-
-                                        if(body.error.error_message == "auth_token is required for this request"){
-                                            self.auth_id = "";
-                                            self.upload(streamobj, callback);
-                                        }else {
-                                            callback("Error upload: " +text);
-                                        }
-
-
                                     }
+
 
                                 }
 
