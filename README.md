@@ -13,12 +13,13 @@ npm install imageshack
 First you need a ImageShack-Account and a API-Key (https://imageshack.com/contact/api)
 
 **Setup**
-```
+```javascript
 var imageshack = require('imageshack')({
     api_key: "your_api_key",
     email: "you@email.com",
     passwd: "yourpassword"
-});```
+});
+```
 
 **Upload a File**
 
