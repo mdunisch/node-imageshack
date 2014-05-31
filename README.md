@@ -95,4 +95,4 @@ async.map(files, function(file, callback) {
 
 ## License
 
-Form-Data is licensed under the MIT license.
+node-imageshack is licensed under the MIT license.
