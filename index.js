@@ -43,7 +43,7 @@ var Imageshack = (function () {
     }
 
 
-    /* TODO: Currently don't work (From.append seems to dont work with method DELETE)
+    /*
      * Delete a File
      * @param id ImageShack-ID of the image
      * @param callback Callbackfunction (err) err = null if sucess
@@ -72,18 +72,15 @@ var Imageshack = (function () {
                 });
             }
 
-            // Do upload
+            // Do delete
         }else{
 
             var text = "";
             var form = new FormData();
-            form.append('api_key',  this.api_key);
-            form.append("auth_token",this.auth_id);
-            form.append("ids",id);
 
             form.submit({
                 host: "api.imageshack.com",
-                path: "/v2/images",
+                path: "/v2/images/" + id+"?auth_token=" +this.auth_id,
                 method: "DELETE"
             }, function(err, res) {
                 if (err) {
@@ -94,7 +91,25 @@ var Imageshack = (function () {
                     });
 
                     res.on("end", function(){
-                        callback(null,text);
+
+                        try {
+                            var body = JSON.parse(text);
+                        }catch (e){
+                            callback("Error delete: " +text);
+                        }
+
+
+                        // json success = true if delete is done right
+
+                        if(body.success != undefined){
+                            if(body.success){
+                                callback(null);
+                            }else{
+                                callback("Error delete: " +text);
+                            }
+                        }
+
+
                     });
                 }
             });

@@ -23,6 +23,8 @@ var imageshack = require('imageshack')({
 
 **Upload a File**
 
+You can upload a file to ImageShack by calling upload-function and pass a NodeJS-Stream-Object.
+
 ```javascript
 var myfile = fs.createReadStream("image.png");
 
@@ -41,6 +43,22 @@ imageshack.upload(myfile,function(err, filejson){
     }
 });
 ```
+
+**Delete a File**
+
+You can delete a file by calling del-function and pass the file-ID (see upload-response).
+
+```javascript
+imageshack.del("d23da2",function(err){
+    if(err){
+        console.log(err);
+    }else{
+        // Delete successful
+    }
+});
+```
+Attention: ImageShack-API give you also a success if the image is delete already - if you try delete a already deleted image you get a success as well.
+
 
 **Upload multiple files asynchronous**
 
@@ -89,9 +107,6 @@ async.map(files, function(file, callback) {
     }
 });
 ```
-
-##TODO
-- Finish del()-Method for deleting Images from ImageShark
 
 ## License
 
