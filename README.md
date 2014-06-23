@@ -1,18 +1,19 @@
 node-imageshack
 ===============
 
-A node.js wrapper for the new ImageShack-API (v2). The module upload files to imageShack (asynchronous).
+A node.js wrapper for the new ImageShack-API (v2). The module asynchronously uploads files to ImageShack.
 
 ## Install
-```
+```bash
 npm install imageshack
 ```
 
 ## Usage
 
-First you need a ImageShack-Account and a API-Key (https://imageshack.com/contact/api)
+You must have an ImageShack-Account and an API-Key (https://imageshack.com/contact/api).
 
 **Setup**
+
 ```javascript
 var imageshack = require('imageshack')({
     api_key: "your_api_key",
@@ -23,7 +24,7 @@ var imageshack = require('imageshack')({
 
 **Upload a File**
 
-You can upload a file to ImageShack by calling upload-function and pass a NodeJS-Stream-Object.
+You can upload a file to ImageShack by calling upload-function and passing a NodeJS-Stream-Object.
 
 ```javascript
 var myfile = fs.createReadStream("image.png");
@@ -33,11 +34,12 @@ imageshack.upload(myfile,function(err, filejson){
         console.log(err);
     }else{
         console.log(filejson);
+
         /* filejson is a json with:
-        { 
-        original_filename: 'image.png',
-        link: 'http://imagizer.imageshack.us/a/img842/4034/221.png',
-        id: 'newtsep' 
+        {
+            original_filename: 'image.png',
+            link: 'http://imagizer.imageshack.us/a/img842/4034/221.png',
+            id: 'newtsep'
         }
        */
     }
@@ -46,7 +48,7 @@ imageshack.upload(myfile,function(err, filejson){
 
 **Delete a File**
 
-You can delete a file by calling del-function and pass the file-ID (see upload-response).
+You can delete a file by calling del-function and passing the file-ID (see upload-response)
 
 ```javascript
 imageshack.del("d23da2",function(err){
@@ -57,12 +59,12 @@ imageshack.del("d23da2",function(err){
     }
 });
 ```
-Attention: ImageShack-API give you also a success if the image is delete already - if you try delete a already deleted image you get a success as well.
+Attention: ImageShack-API gives you also a success, if the image has already been deleted -- so if you try to delete an already deleted image, you will get a success as well.
 
 
-**Upload multiple files asynchronous**
+**Upload multiple files asynchronously**
 
-node-imageshack is designed asynchronous so you can call multiple upload()-methods and all would work asynchronous:
+node-imageshack is designed asynchronously; you can call multiple upload()-methods and then all would work asynchronously:
 
 ```javascript
 var myfile1 = fs.createReadStream("image.png");
@@ -88,7 +90,7 @@ imageshack.upload(myfile2,function(err, filejson){
 
 **Upload multiple files (async.js)**
 
-You can also use [`async.js`](https://github.com/caolan/async) to upload multiple files defined in a array.
+You may also use [`async.js`](https://github.com/caolan/async) to upload multiple files defined in an array.
 
 ```javascript
 var files = [fs.createReadStream("image1.png"),fs.createReadStream("image2.png")];
